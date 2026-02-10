@@ -5,6 +5,7 @@ export const useGameLogic = ( cardValues ) => {
     const [flippedCards, setFlippedCards] = useState( [] );
     const [score, setScore] = useState( 0 );
     const [moves, setMoves] = useState( 0 );
+    const [block, setBlock] = useState( false );
 
     useEffect( () => {
         initializeGame();
@@ -36,7 +37,7 @@ export const useGameLogic = ( cardValues ) => {
     }
 
     const handleClick = ( card ) => {
-        if( card.isFlipped || flippedCards.length === 2 )
+        if( card.isFlipped || flippedCards.length === 2 || block )
             return;
 
         const newCards = cards.map( (c) => {
@@ -52,6 +53,7 @@ export const useGameLogic = ( cardValues ) => {
         setFlippedCards( newFlippedCards );
         
         if( flippedCards.length === 1 ) {
+            setBlock( true );
             setMoves( prev => prev + 1 );
             const firstCard = cards[flippedCards[0]]
             if( firstCard.value === card.value ){
@@ -63,6 +65,7 @@ export const useGameLogic = ( cardValues ) => {
                     else
                         return c;
                 }));
+                setBlock( false );
                 // }, 500);
             } else {
                 setCards( (prev) => prev.map ( c => {
@@ -78,6 +81,7 @@ export const useGameLogic = ( cardValues ) => {
                         else
                             return c;
                     }));
+                    setBlock( false );
                 }, 500);
             }
             
